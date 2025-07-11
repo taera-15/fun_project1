@@ -1,0 +1,167 @@
+<!-- FILE: quiz10.html (Final Confession Trap) -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz 10 - Final Confession</title>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Baloo 2', cursive;
+      background: linear-gradient(to right, #1d1d1d, #3f1d3f);
+      color: #fff;
+      animation: movingBackground 10s ease-in-out infinite;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      overflow-x: hidden;  /* No horizontal scrolling */
+      
+      scrollbar-width: none;  /* Hide scrollbar for Firefox */
+      opacity: 1; /* Initial opacity for fade-in */
+      transition: opacity 1s ease-in-out; /* Smooth fade-in transition */
+    }
+
+    /* Hide scrollbar for larger screens (laptop/desktop) */
+    @media (min-width: 1024px) {
+      body {
+        overflow-y: hidden;  /* Hide vertical scrollbar on large screens */
+      }
+    }
+
+    /* Show scrollbar for mobile */
+    @media (max-width: 1023px) {
+      body {
+        overflow-y: scroll;  /* Allow vertical scrolling on mobile */
+      }
+    }
+    
+
+    .stars {
+      position: absolute;
+      font-size: 18px;
+      animation: fall 5s linear infinite;
+      color: #f7c1ff;
+      opacity: 0.6;
+      top: -30px;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(110vh); opacity: 0; }
+    }
+
+    .container {
+      background-color: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 800px;
+      width: 90%;
+      box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
+      z-index: 2;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 2.2em;
+      color: #fcb3ff;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 1.1em;
+      color: #e6c7f2;
+      margin-bottom: 20px;
+    }
+
+    textarea {
+      width: 90%;
+      padding: 20px;
+      border-radius: 10px;
+      border: none;
+      font-size: 1.2em;
+      resize: vertical;
+      min-height: 150px;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+
+    button {
+      margin-top: 20px;
+      background-color: #ff4fbd;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      font-size: 1.2em;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #ff2fa0;
+    }
+
+    #thankyou {
+      margin-top: 20px;
+      font-size: 1.4em;
+      color: #e6c7f2;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  
+
+  <script>
+    // Play background music as soon as the page loads
+    window.onload = function() {
+      document.getElementById("backgroundMusic").play();
+    }
+
+    // Falling Stars Animation
+    for (let i = 0; i < 30; i++) {
+      let star = document.createElement('div');
+      star.className = 'stars';
+      star.innerText = '🌠';
+      star.style.left = Math.random() * 100 + 'vw';
+      star.style.animationDuration = (3 + Math.random() * 5) + 's';
+      document.body.appendChild(star);
+    }
+  </script>
+
+   <!-- Background Music -->
+  <audio id="backgroundMusic" loop>
+    <source src="homepage_lofi_song.mp3" type="audio/mp3">
+    Your browser does not support the audio element.
+  </audio>
+  <div class="container">
+    <h1>💌 If Sameera Disappears Forever...</h1>
+    <p>Type the message you'd send her — the one you never got to say. Be honest. Be raw. No filters.</p>
+    <textarea id="finalMessage" placeholder="Start typing from your heart..."></textarea>
+    <button onclick="submitConfession()">Send Final Words 💬</button>
+    <div id="thankyou">📩 Your message has been sealed in memory. Forever.</div>
+  </div>
+
+  <script>
+    function submitConfession() {
+      const msg = document.getElementById('finalMessage').value.trim();
+      if (!msg) {
+        alert("Type something before submitting...");
+        return;
+      }
+
+      // Store in localStorage (can be retrieved later)
+      localStorage.setItem("confessionMessage", msg);
+      document.getElementById('thankyou').style.display = 'block';
+      setTimeout(() => {
+        window.location.href = "thankyou.html";
+      }, 6000);
+    }
+  </script>
+</body>
+</html>

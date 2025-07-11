@@ -1,0 +1,231 @@
+<!-- FILE: quiz5.html (Dare Room) -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz 5 - Dare Room</title>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2&display=swap" rel="stylesheet">
+  <style>
+    
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Baloo 2', cursive;
+      background: linear-gradient(to right, #1a1a1a, #3b0a3b); /* Keep the original background */
+      animation: movingBackground 10s ease-in-out infinite;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      overflow-x: hidden;  /* No horizontal scrolling */
+      color: #fff;
+      scrollbar-width: none;  /* Hide scrollbar for Firefox */
+      opacity: 1; /* Initial opacity for fade-in */
+      transition: opacity 1s ease-in-out; /* Smooth fade-in transition */
+    }
+
+    /* Hide scrollbar for larger screens (laptop/desktop) */
+    @media (min-width: 1024px) {
+      body {
+        overflow-y: hidden;  /* Hide vertical scrollbar on large screens */
+      }
+    }
+
+    /* Show scrollbar for mobile */
+    @media (max-width: 1023px) {
+      body {
+        overflow-y: scroll;  /* Allow vertical scrolling on mobile */
+      }
+    }
+
+    .fire {
+      position: absolute;
+      font-size: 22px;
+      animation: fall 4s linear infinite;
+      color: #ff4081;
+      opacity: 0.6;
+      top: -30px;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(110vh); opacity: 0; }
+    }
+
+    .container {
+      background-color: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(255, 64, 129, 0.4);
+      padding: 40px;
+      max-width: 900px;
+      width: 90%;
+      text-align: center;
+      z-index: 2;
+    }
+
+    h1 {
+      font-size: 1.8em;
+      color: #ff80ab;
+      margin-bottom: 30px;
+    }
+
+    .options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .option-card {
+      border: 3px solid transparent;
+      border-radius: 15px;
+      padding: 20px;
+      transition: 0.3s;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .option-card:hover {
+      background: rgba(255, 64, 129, 0.1);
+    }
+
+    .option-card.selected {
+      border-color: #ff4081;
+      background: rgba(255, 64, 129, 0.2);
+      transform: scale(1.03);
+    }
+
+    button {
+      background-color: #ff4081;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      font-size: 1em;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #e91e63;
+    }
+
+    #feedback {
+      margin-top: 20px;
+      font-size: 1.2em;
+      color: #ffe4f0;
+    }
+
+    /* Warning Message Styling */
+    .warning {
+      margin-top: 20px;
+      font-size: 1.2em;
+      color: #ffcc00;  /* Yellow color for the warning */
+      font-weight: bold;
+      text-align: center;
+      border: 2px solid #ffcc00;
+      padding: 15px;
+      border-radius: 10px;
+      background-color: rgba(255, 255, 255, 0.1);
+      animation: warningAnimation 0.5s ease-in-out infinite alternate;
+    }
+
+    /* Warning Message Animation */
+    @keyframes warningAnimation {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.05); }
+    }
+
+  </style>
+</head>
+<body>
+  <script>
+    for (let i = 0; i < 30; i++) {
+      let fire = document.createElement('div');
+      fire.className = 'fire';
+      fire.innerText = '🔥';
+      fire.style.left = Math.random() * 100 + 'vw';
+      fire.style.animationDuration = (3 + Math.random() * 5) + 's';
+      fire.style.animationDelay = '0s';
+      document.body.appendChild(fire);
+    }
+
+    // Background music
+    window.onload = function() {
+      document.getElementById("backgroundMusic").play();
+    };
+
+    let selectedCard = null;
+
+    function selectOption(card) {
+      document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      selectedCard = card.innerText;
+    }
+
+    function lockDare() {
+      const feedback = document.getElementById("feedback");
+
+      if (!selectedCard) {
+        feedback.innerHTML = "❗ Choose a dare first, cutie!";
+        return;
+      }
+
+      feedback.innerHTML = `🔥 Oof... you better do this in your next call with Sameera!<br><br>📸 She’s waiting... don’t forget the proof!`;
+
+      // Play clapping sound for correct selection
+      playSound('clapping');
+
+      setTimeout(() => {
+        fadeOutAndRedirect();
+      }, 6000); // Wait for 6 seconds before redirect
+    }
+
+    // Fade-out effect and redirect to the next page
+    function fadeOutAndRedirect() {
+      document.body.classList.add('fade-out');  // Add fade-out class
+      setTimeout(() => {
+        window.location.href = "quiz6.html";  // Redirect to the next quiz page
+      }, 1000); // Wait 1 second for the fade-out transition
+    }
+
+    // Function to play sound effects
+    function playSound(type) {
+      let sound;
+      if (type === 'clapping') {
+        sound = new Audio('clapping_sound.wav');  // Replace with correct file path
+      } else {
+        return; // No sound for wrong selection
+      }
+      sound.play();
+    }
+  </script>
+
+  <!-- Background Music -->
+  <audio id="backgroundMusic" loop>
+    <source src="dark_music.mp3" type="audio/mp3">
+    Your browser does not support the audio element.
+  </audio>
+
+  <!-- Content -->
+  <div class="container">
+    <h1>🔥 Choose a dare... if you’re brave enough 😉</h1>
+    <div class="options">
+      <div class="option-card" onclick="selectOption(this)">Send Sameera a voice note saying “I miss you jaan” in 3 tones [serious, romantic, and baby voice] 🎙️</div>
+      <div class="option-card" onclick="selectOption(this)">Record a video saying 3 things you love about Sameera, and 1 thing that annoys you 😜</div>
+      <div class="option-card" onclick="selectOption(this)">When on call with Sameera, say “I can’t stop thinking about kissing you” and act it 😏</div>
+      <div class="option-card" onclick="selectOption(this)">During next talk, write & recite a 4-line poem using: “crazy, moon, fire, kiss” 🔥</div>
+    </div>
+    <button onclick="lockDare()">I Dare to Choose 😈</button>
+
+    <!-- Warning Message -->
+    <div class="warning">
+      ⚠️ The next question is very personal. Please be alone and away from public view. ⚠️
+    </div>
+
+    <div id="feedback"></div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terms & Entry Check</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Baloo+2&display=swap" rel="stylesheet">
+  <style>
+    /* General Reset */
+    * {
+      box-sizing: border-box;
+    }
+
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100vh;
+      background: linear-gradient(to right, #c9a0dc, #ffcce6);
+      font-family: 'Quicksand', sans-serif;
+      overflow-x: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    /* Music Toggle */
+    #musicToggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 8px 15px; /* Adjusted padding for better width */
+      font-size: 1em;
+      border: none;
+      border-radius: 10px;
+      background: #fff0f5;
+      color: #cc0066;
+      font-family: 'Pacifico', cursive;
+      cursor: pointer;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+      z-index: 10;
+    }
+
+    /* Terms Box */
+    .container {
+      background: rgba(255,255,255,0.2);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+      text-align: center;
+      max-width: 700px;
+      width: 90%;
+      z-index: 2;
+      backdrop-filter: blur(6px);
+      margin-top: 100px;
+    }
+
+    h1 {
+      font-family: 'Pacifico', cursive;
+      font-size: 2.5em;
+      color: #880e4f;
+    }
+
+    p {
+      font-size: 1.1em;
+      margin-bottom: 20px;
+    }
+
+    input[type="date"] {
+      padding: 12px;
+      font-size: 1em;
+      border-radius: 10px;
+      border: none;
+      width: 70%;
+      margin-top: 10px;
+    }
+
+    button {
+      margin-top: 25px;
+      padding: 12px 25px;
+      background: #f06292;
+      color: white;
+      font-size: 1em;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s;
+      width: 100%;
+    }
+
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    button:hover {
+      background: #e91e63;
+    }
+
+    .loading {
+      border: 3px solid transparent;
+      border-top: 3px solid #fff;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+      margin-left: 10px;
+    }
+
+    .error {
+      color: red;
+      margin-top: 10px;
+    }
+
+    .hint {
+      color: #ff80c0;
+      font-size: 1.1em;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Heart Animation */
+    .heart {
+      position: absolute;
+      color: #ff6699;
+      animation: fall 6s linear infinite;
+      top: -30px;
+      z-index: 1;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(110vh); opacity: 0; }
+    }
+
+
+    /* Mobile Responsiveness */
+    @media (max-width: 600px) {
+      body, html {
+        overflow-y: scroll; /* Allow scroll on mobile */
+      }
+
+      h1 {
+        font-size: 1.8em;
+      }
+
+      .container {
+        padding: 30px;
+        margin-top: 20px;
+      }
+
+      input[type="date"] {
+        font-size: 0.9em;
+        width: 85%;
+      }
+
+      button {
+        font-size: 0.9em;
+        padding: 10px 20px;
+      }
+
+      #musicToggle {
+        font-size: 0.9em;
+        padding: 8px 12px;
+        width: auto; /* Adjusted width for better fit */
+      }
+    }
+
+    /* For larger screens (no scrolling needed) */
+    @media (min-width: 601px) {
+      body, html {
+        overflow: hidden; /* Disable scrolling on desktop/laptop */
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <audio id="bgMusic" loop>
+    <source src="homepage_lofi_song.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+  <button id="musicToggle">🔊 Music On</button>
+
+  <!-- Heart Animations -->
+  <script>
+    const heartTypes = ['💖', '❤️', '💘', '💝'];
+    for (let i = 0; i < 35; i++) {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.innerText = heartTypes[Math.floor(Math.random() * heartTypes.length)];
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.animationDuration = (3 + Math.random() * 4) + 's';
+      heart.style.fontSize = (18 + Math.random() * 10) + 'px';
+      heart.style.transform = `rotate(${Math.random() * 360}deg)`;
+      document.body.appendChild(heart);
+    }
+  </script>
+
+  <div class="container">
+    <h1>⚠️ Terms & Conditions</h1>
+    <p>By entering this quiz, you agree to:</p>
+    <p>— Answer all questions with honesty 😈<br>
+       — Finish all 10 levels without escaping 💔<br>
+       — Risk being emotionally exposed 💌</p>
+    <p>And now… a warm-up memory check:</p>
+    <p><strong>When did we have our first date?</strong></p>
+    <input type="date" id="dateInput">
+    <br>
+    <button id="lockButton" onclick="validateDate()">Lock & Enter</button>
+    <div class="error" id="errorMsg"></div>
+    <div class="hint" id="hintMsg"></div>
+  </div>
+
+  <audio id="successSound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_96fa4210bb.mp3"></audio>
+  <audio id="failSound" src="https://cdn.pixabay.com/audio/2022/03/02/audio_7a82e1e27a.mp3"></audio>
+  <audio id="ohNoSound" src="Voicy_No.mp3"></audio> <!-- Add your "Oh no!" sound here -->
+  <audio id="clappingSound" src="clapping_sound.wav"></audio> <!-- Add your clapping sound here -->
+
+  <script>
+    const music = document.getElementById('bgMusic');
+    const toggleBtn = document.getElementById('musicToggle');
+    let isPlaying = false;
+
+    // Check if the music state is saved in localStorage
+    if (localStorage.getItem('musicStatus') === 'true') {
+      music.play();
+      toggleBtn.textContent = '🔇 Mute Music';
+      isPlaying = true;
+    } else {
+      music.pause();
+      toggleBtn.textContent = '🔊 Music On';
+      isPlaying = false;
+    }
+
+    toggleBtn.addEventListener('click', () => {
+      if (!isPlaying) {
+        music.play();
+        toggleBtn.textContent = '🔇 Mute Music';
+        localStorage.setItem('musicStatus', 'true');
+      } else {
+        music.pause();
+        toggleBtn.textContent = '🔊 Music On';
+        localStorage.setItem('musicStatus', 'false');
+      }
+      isPlaying = !isPlaying;
+    });
+
+    function validateDate() {
+      const dateInput = document.getElementById("dateInput").value;
+      const errorMsg = document.getElementById("errorMsg");
+      const button = document.getElementById("lockButton");
+
+      // Disable button and show loading spinner
+      button.disabled = true;
+      button.innerHTML = "Loading... <div class='loading'></div>";
+
+      if (dateInput === "2025-05-27") {
+        document.getElementById("clappingSound").play(); // Play clapping sound for correct answer
+        errorMsg.innerHTML = "";
+        setTimeout(() => {
+          window.location.href = "quiz1.html";
+        }, 3000);
+      } else {
+        document.getElementById("ohNoSound").play(); // Play "Oh no!" sound for wrong answer
+        errorMsg.innerText = "Wrong! We are not moving forward until you remember 😡";
+        button.disabled = false;
+        button.innerHTML = "Lock & Enter";
+      }
+    }
+  </script>
+</body>
+</html>

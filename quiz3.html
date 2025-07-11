@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz 3 - Ideal Man</title>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Baloo 2', cursive;
+      background: linear-gradient(to right, #f5a7c0, #e4d0ff);
+      animation: movingBackground 10s ease-in-out infinite;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      overflow-x: hidden;  /* No horizontal scrolling */
+      color: #222;
+      scrollbar-width: none;  /* Hide scrollbar for Firefox */
+      opacity: 1; /* Initial opacity for fade-in */
+      transition: opacity 1s ease-in-out; /* Smooth fade-in transition */
+    }
+
+    
+    /* Hide scrollbar for larger screens (laptop/desktop) */
+    @media (min-width: 1024px) {
+      body {
+        overflow-y: hidden;  /* Hide vertical scrollbar on large screens */
+      }
+    }
+
+    /* Show scrollbar for mobile */
+    @media (max-width: 1023px) {
+      body {
+        overflow-y: scroll;  /* Allow vertical scrolling on mobile */
+      }
+    }
+
+    .star {
+      position: absolute;
+      font-size: 20px;
+      animation: fall 6s linear infinite;
+      top: -30px;
+      opacity: 0.4;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(110vh); opacity: 0; }
+    }
+
+    .container {
+      background-color: rgba(255,255,255,0.8);
+      border-radius: 20px;
+      padding: 30px;
+      max-width: 960px;
+      width: 95%;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      z-index: 2;
+      overflow: hidden;
+    }
+
+    h1 {
+      font-size: 2em;
+      color: #d63384;
+      margin-bottom: 25px;
+    }
+
+    .options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .option-card {
+      border: 3px solid transparent;
+      border-radius: 15px;
+      overflow: hidden;
+      transition: 0.3s;
+      cursor: pointer;
+      background-color: #fff;
+    }
+
+    .option-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .option-card.selected {
+      border-color: #d63384;
+      transform: scale(1.05);
+    }
+
+    .description {
+      margin-top: 10px;
+      font-size: 1em;
+      color: #666;
+      font-style: italic;
+    }
+
+    button {
+      background-color: #d63384;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      font-size: 1em;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #b71c5a;
+    }
+
+    #feedback {
+      margin-top: 20px;
+      font-size: 1.2em;
+      color: #444;
+    }
+
+    /* Fade-out effect for page transition */
+    .fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+  <script>
+    // Create falling stars animation
+    for (let i = 0; i < 30; i++) {
+      let star = document.createElement('div');
+      star.className = 'star';
+      star.innerText = '✨';
+      star.style.left = Math.random() * 100 + 'vw';
+      star.style.animationDuration = (3 + Math.random() * 4) + 's';
+      document.body.appendChild(star);
+    }
+
+    // Play background music when the user interacts with the page
+    let musicStarted = false;
+    function startMusic() {
+      if (!musicStarted) {
+        document.getElementById("backgroundMusic").play();
+        musicStarted = true;
+      }
+    }
+  </script>
+
+  <div class="container">
+    <h1>Who's Sameera’s Ideal Man? 💘</h1>
+    <div class="options">
+      <div class="option-card" onclick="selectOption(this, 'Hyun Bin')">
+        <img src="https://preview.redd.it/4mpiizrw5m851.jpg?width=640&crop=smart&auto=webp&s=a720071a519dd9c77819ba00c4f43a6026862a81" alt="Hyun Bin">
+        <div class="description">Cold, mature, but lovable...</div>
+      </div>
+      <div class="option-card" onclick="selectOption(this, 'Sehun')">
+        <img src="https://i.pinimg.com/564x/1e/1f/c2/1e1fc24ae9d267d08a1ca84de31c01d0.jpg" alt="Sehun">
+        <div class="description">Lowkey clingy, young...</div>
+      </div>
+      <div class="option-card" onclick="selectOption(this, 'Sidharth Malhotra')">
+        <img src="https://i.pinimg.com/736x/c5/ef/1d/c5ef1d85978670fc2d3a9380cdb38bcf.jpg" alt="Sidharth">
+        <div class="description">Cute...</div>
+      </div>
+      <div class="option-card" onclick="selectOption(this, 'Ravi Dubey')">
+        <img src="https://jagruktimes.co.in/wp-content/uploads/2024/06/RAVI.webp" alt="Ravi">
+        <div class="description">Husband material – spiritual and ambitious...</div>
+      </div>
+    </div>
+    <button onclick="startMusic(); lockAnswer()">Lock My Choice ❤️</button>
+    <div id="feedback"></div>
+
+    <!-- Add background music -->
+    <audio id="backgroundMusic" loop>
+      <source src="homepage_lofi_song.mp3" type="audio/mpeg">
+      Your browser does not support the audio element.
+    </audio>
+
+    <audio id="failSound" src="https://cdn.pixabay.com/audio/2023/03/27/audio_d62ba53c43.mp3"></audio>
+    <audio id="successSound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_96fa4210bb.mp3"></audio>
+  </div>
+
+  <script>
+    let selectedName = null;
+
+    function selectOption(card, name) {
+      document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      selectedName = name;
+    }
+
+    function lockAnswer() {
+      const feedback = document.getElementById("feedback");
+      if (!selectedName) {
+        feedback.innerHTML = "❗ Choose your ideal man first!";
+        return;
+      }
+
+      if (selectedName === "Hyun Bin") {
+        document.getElementById("successSound").play();
+        feedback.innerHTML = "🌸 You know Sameera’s heart... Hyun Bin is the one!";
+      } else {
+        document.getElementById("failSound").play();
+        feedback.innerHTML = "💔 Oops... not quite who she dreams about.";
+      }
+
+      setTimeout(() => {
+        fadeOutAndRedirect();
+      }, 5000);
+    }
+
+    // Fade-out effect and transition to next page
+    function fadeOutAndRedirect() {
+      document.body.classList.add('fade-out');
+      setTimeout(() => {
+        window.location.href = "quiz4.html";  
+      }, 1000); 
+    }
+  </script>
+</body>
+</html>

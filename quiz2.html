@@ -1,0 +1,188 @@
+<!-- FILE: quiz2.html (Seriousness Slider) -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz 2 - Seriousness Meter</title>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2&display=swap" rel="stylesheet">
+  <style>
+    /* Global body styling */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Baloo 2', cursive;
+      background: linear-gradient(to right, #f5a7c0, #e4d0ff);
+      animation: movingBackground 10s ease-in-out infinite;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      overflow-x: hidden;  /* No horizontal scrolling */
+      color: #222;
+      scrollbar-width: none;  /* Hide scrollbar for Firefox */
+      opacity: 1; /* Initial opacity for fade-in */
+      transition: opacity 1s ease-in-out; /* Smooth fade-in transition */
+    }
+
+    /* Hide scrollbar for larger screens (laptop/desktop) */
+    @media (min-width: 1024px) {
+      body {
+        overflow-y: hidden;  /* Hide vertical scrollbar on large screens */
+      }
+    }
+
+    /* Show scrollbar for mobile */
+    @media (max-width: 1023px) {
+      body {
+        overflow-y: scroll;  /* Allow vertical scrolling on mobile */
+      }
+    }
+
+    /* Heart animation */
+    .heart {
+      position: absolute;
+      font-size: 22px;
+      animation: float 6s linear infinite;
+      opacity: 0.3;
+      top: -30px;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(110vh); opacity: 0; }
+    }
+
+    /* Container styling */
+    .container {
+      background-color: rgba(255, 255, 255, 0.8);
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      padding: 40px;
+      max-width: 900px;
+      width: 90%;
+      text-align: center;
+      z-index: 2;
+    }
+
+    h1 {
+      font-size: 2em;
+      color: #1a237e;
+      margin-bottom: 20px;
+    }
+
+    .slider-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    input[type=range] {
+      width: 80%;
+      margin-top: 20px;
+    }
+
+    #rangeValue {
+      font-size: 2em;
+      color: #00838f;
+      margin-top: 10px;
+    }
+
+    button {
+      background-color: #00acc1;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      font-size: 1em;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 30px;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #00838f;
+    }
+
+    /* Fade-out effect for page transition */
+    .fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Background music -->
+  <audio id="backgroundMusic" loop muted>
+    <source src="homepage_lofi_song.mp3" type="audio/mp3">
+    Your browser does not support the audio element.
+  </audio>
+
+  <script>
+    // Wait for the DOM to be fully loaded before executing the script
+    document.addEventListener('DOMContentLoaded', function () {
+      
+      // Create floating hearts
+      for (let i = 0; i < 30; i++) {
+        let heart = document.createElement('div');
+        heart.className = 'heart';
+        heart.innerText = '💙';
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.animationDuration = (3 + Math.random() * 4) + 's';
+        document.body.appendChild(heart);
+      }
+
+      // Fade transition function
+      function fadeOutAndRedirect() {
+        document.body.classList.add('fade-out');  // Add fade-out class
+        setTimeout(() => {
+          window.location.href = "quiz3.html";  // Redirect to the next page after the fade-out
+        }, 1000); // Wait for 1 second to allow fade-out
+      }
+
+      // Slider and button logic
+      const slider = document.getElementById("slider");
+      const valueLabel = document.getElementById("rangeValue");
+
+      slider.addEventListener("input", () => {
+        valueLabel.innerText = slider.value + "%";
+      });
+
+      function lockAnswer() {
+        const score = slider.value;
+        localStorage.setItem("quiz2-seriousness", score);
+        fadeOutAndRedirect();  // Trigger smooth transition before redirecting
+      }
+
+      // Function to start music (with a slight delay to ensure autoplay works)
+      function startMusic() {
+        const music = document.getElementById("backgroundMusic");
+        
+        // Play music after a short delay to bypass autoplay restrictions
+        setTimeout(() => {
+          music.muted = false; // Unmute the music after it starts playing
+          music.play(); // Start playing the music
+        }, 200);  // Delay for 200ms to help trigger the autoplay properly
+      }
+
+      // Auto-trigger music start as soon as the page is loaded
+      window.onload = startMusic;
+
+      // Attach the lockAnswer function to the button click
+      document.querySelector("button").addEventListener("click", lockAnswer);
+      
+    });
+  </script>
+
+  <div class="container">
+    <h1>How much do you think Sameera is serious about you?</h1>
+    <div class="slider-container">
+      <input type="range" min="0" max="100" value="50" id="slider">
+      <div id="rangeValue">50%</div>
+    </div>
+    <button>Lock My Intuition 🔐</button>
+  </div>
+
+</body>
+</html>

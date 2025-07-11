@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thank You</title>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Baloo 2', cursive;
+      background: linear-gradient(to right, #240046, #5a189a);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      color: #fff;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    .spark {
+      position: absolute;
+      font-size: 20px;
+      animation: fall 6s linear infinite;
+      color: #ffbbf2;
+      opacity: 0.4;
+      top: -30px;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(110vh); opacity: 0; }
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 50px;
+      max-width: 850px;
+      width: 90%;
+      box-shadow: 0 10px 40px rgba(255, 255, 255, 0.2);
+      z-index: 2;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      color: #ffe9f9;
+    }
+
+    p {
+      font-size: 1.2em;
+      line-height: 1.7;
+      color: #ffd6f5;
+    }
+
+    .footer {
+      margin-top: 30px;
+      font-size: 1em;
+      color: #e0b3ff;
+    }
+  </style>
+</head>
+<body>
+  <script>
+    for (let i = 0; i < 30; i++) {
+      let star = document.createElement('div');
+      star.className = 'spark';
+      star.innerText = '💫';
+      star.style.left = Math.random() * 100 + 'vw';
+      star.style.animationDuration = (3 + Math.random() * 5) + 's';
+      star.style.animationDelay = '0s';
+      document.body.appendChild(star);
+    }
+  </script>
+
+  <div class="container">
+    <h1>💖 Thank You for Playing</h1>
+    <p>
+      You’ve made it to the end of Sameera’s love maze.<br>
+      Every answer you gave has been saved in her heart (and localStorage 😜).<br><br>
+      But wait — there’s more to come!<br>
+      The next set of questions will be all about <strong>you</strong> — your dreams, fears, and secrets.<br>
+      For now, rest up. The next round might be even crazier 💌✨
+    </p>
+    <div class="footer">Made with blush, drama, and a little madness 💋</div>
+  </div>
+
+  <script>
+async function sendToSheet() {
+  const url = "https://script.google.com/macros/s/AKfycbyjDfIzgiOfOs9aivR1h5x_w9cB8Qn24dg7RStZbwAN-Jrl62NC4qC7u7e8iiG94HqkGw/exec";
+  const data = {
+    timestamp: new Date().toISOString(),
+    username: localStorage.getItem("username"),
+    quiz1: localStorage.getItem("quiz1_answer"),
+    quiz2: localStorage.getItem("quiz2_answer"),
+    // ... quiz3 to quiz10
+    quiz10: localStorage.getItem("quiz10_confession"),
+    score: localStorage.getItem("score")
+  };
+
+  const resp = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams(data)
+  });
+
+  const result = await resp.json();
+  console.log("Submitted:", result);
+}
+
+sendToSheet();
+</script>
+
+</body>
+</html>
