@@ -1,4 +1,4 @@
-<!-- FILE: quiz2.html (Seriousness Slider) -->
+<!-- FILE: quiz2.html (Seriousness Slider - Updated with Google Sheets Integration) -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +7,6 @@
   <title>Quiz 2 - Seriousness Meter</title>
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2&display=swap" rel="stylesheet">
   <style>
-    /* Global body styling */
     body {
       margin: 0;
       padding: 0;
@@ -19,28 +18,10 @@
       justify-content: center;
       align-items: center;
       flex-direction: column;
-      overflow-x: hidden;  /* No horizontal scrolling */
+      overflow-x: hidden;
       color: #222;
-      scrollbar-width: none;  /* Hide scrollbar for Firefox */
-      opacity: 1; /* Initial opacity for fade-in */
-      transition: opacity 1s ease-in-out; /* Smooth fade-in transition */
+      transition: opacity 1s ease-in-out;
     }
-
-    /* Hide scrollbar for larger screens (laptop/desktop) */
-    @media (min-width: 1024px) {
-      body {
-        overflow-y: hidden;  /* Hide vertical scrollbar on large screens */
-      }
-    }
-
-    /* Show scrollbar for mobile */
-    @media (max-width: 1023px) {
-      body {
-        overflow-y: scroll;  /* Allow vertical scrolling on mobile */
-      }
-    }
-
-    /* Heart animation */
     .heart {
       position: absolute;
       font-size: 22px;
@@ -48,13 +29,10 @@
       opacity: 0.3;
       top: -30px;
     }
-
     @keyframes float {
       0% { transform: translateY(0); opacity: 1; }
       100% { transform: translateY(110vh); opacity: 0; }
     }
-
-    /* Container styling */
     .container {
       background-color: rgba(255, 255, 255, 0.8);
       border-radius: 20px;
@@ -65,30 +43,25 @@
       text-align: center;
       z-index: 2;
     }
-
     h1 {
       font-size: 2em;
       color: #1a237e;
       margin-bottom: 20px;
     }
-
     .slider-container {
       display: flex;
       flex-direction: column;
       align-items: center;
     }
-
     input[type=range] {
       width: 80%;
       margin-top: 20px;
     }
-
     #rangeValue {
       font-size: 2em;
       color: #00838f;
       margin-top: 10px;
     }
-
     button {
       background-color: #00acc1;
       color: white;
@@ -98,14 +71,10 @@
       border-radius: 10px;
       cursor: pointer;
       margin-top: 30px;
-      transition: 0.3s;
     }
-
     button:hover {
       background-color: #00838f;
     }
-
-    /* Fade-out effect for page transition */
     .fade-out {
       opacity: 0;
       pointer-events: none;
@@ -113,17 +82,15 @@
   </style>
 </head>
 <body>
-  <!-- Background music -->
   <audio id="backgroundMusic" loop muted>
     <source src="homepage_lofi_song.mp3" type="audio/mp3">
     Your browser does not support the audio element.
   </audio>
 
   <script>
-    // Wait for the DOM to be fully loaded before executing the script
+    const SCRIPT_URL = "https://docs.google.com/spreadsheets/d/1BSjpMUSEPLCe3_IJuJt43qmyUxCQsLhSFWNA2kTYtJs";
+
     document.addEventListener('DOMContentLoaded', function () {
-      
-      // Create floating hearts
       for (let i = 0; i < 30; i++) {
         let heart = document.createElement('div');
         heart.className = 'heart';
@@ -133,15 +100,6 @@
         document.body.appendChild(heart);
       }
 
-      // Fade transition function
-      function fadeOutAndRedirect() {
-        document.body.classList.add('fade-out');  // Add fade-out class
-        setTimeout(() => {
-          window.location.href = "quiz3.html";  // Redirect to the next page after the fade-out
-        }, 1000); // Wait for 1 second to allow fade-out
-      }
-
-      // Slider and button logic
       const slider = document.getElementById("slider");
       const valueLabel = document.getElementById("rangeValue");
 
@@ -149,29 +107,41 @@
         valueLabel.innerText = slider.value + "%";
       });
 
-      function lockAnswer() {
+      document.querySelector("button").addEventListener("click", () => {
         const score = slider.value;
+        const username = localStorage.getItem("username") || "Unknown";
+        const timestamp = new Date().toLocaleString();
+        const quizNum = "Quiz 2";
+
         localStorage.setItem("quiz2-seriousness", score);
-        fadeOutAndRedirect();  // Trigger smooth transition before redirecting
-      }
 
-      // Function to start music (with a slight delay to ensure autoplay works)
-      function startMusic() {
+        fetch(SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify({
+            username: username,
+            quiz: quizNum,
+            answer: score + "%",
+            timestamp: timestamp
+          }),
+          headers: {
+            "Content-Type": "application/json"
+          }
+        }).then(res => {
+          document.body.classList.add("fade-out");
+          setTimeout(() => {
+            window.location.href = "quiz3.html";
+          }, 1000);
+        }).catch(err => {
+          alert("Error saving data. Try again later.");
+          console.error(err);
+        });
+      });
+
+      setTimeout(() => {
         const music = document.getElementById("backgroundMusic");
-        
-        // Play music after a short delay to bypass autoplay restrictions
-        setTimeout(() => {
-          music.muted = false; // Unmute the music after it starts playing
-          music.play(); // Start playing the music
-        }, 200);  // Delay for 200ms to help trigger the autoplay properly
-      }
-
-      // Auto-trigger music start as soon as the page is loaded
-      window.onload = startMusic;
-
-      // Attach the lockAnswer function to the button click
-      document.querySelector("button").addEventListener("click", lockAnswer);
-      
+        music.muted = false;
+        music.play();
+      }, 200);
     });
   </script>
 
@@ -183,6 +153,5 @@
     </div>
     <button>Lock My Intuition 🔐</button>
   </div>
-
 </body>
 </html>
